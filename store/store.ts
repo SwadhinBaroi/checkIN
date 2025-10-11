@@ -1,15 +1,22 @@
 import { create } from 'zustand';
 
-export interface BearState {
-  bears: number;
-  increasePopulation: () => void;
-  removeAllBears: () => void;
-  updateBears: (newBears: number) => void;
+interface FormData {
+  fullName: string;
+  dateOfBirth: Date | null;
 }
 
-export const useStore = create<BearState>((set) => ({
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
-  updateBears: (newBears) => set({ bears: newBears }),
+interface FormStore {
+  formData: FormData;
+  setFormData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+}
+
+export const useFormStore = create<FormStore>((set) => ({
+  formData: {
+    fullName: '',
+    dateOfBirth: null,
+  },
+  setFormData: (field, value) =>
+    set((state) => ({
+      formData: { ...state.formData, [field]: value },
+    })),
 }));
