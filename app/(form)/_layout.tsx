@@ -1,11 +1,14 @@
 import { Stack } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Logo from '@/assets/logo.svg';
 import Colors from '@/app/constants/colors';
+import { useLayoutStore } from '@/store/store';
 
 const FormLayout = () => {
+  const { colorState } = useLayoutStore();
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background_light }}>
       {/* Persistent design */}
@@ -58,17 +61,22 @@ const FormLayout = () => {
               style={{
                 fontFamily: 'PoppinsMedium',
                 fontSize: 12,
-                color: '#000000',
-                borderColor: Colors.disable,
+                color: colorState >= 1 ? '#ffffff' : '#000000',
+                borderColor: colorState >= 1 ? Colors.primary : Colors.disable,
                 borderWidth: 1,
-                backgroundColor: Colors.disable,
+                backgroundColor: colorState >= 1 ? Colors.primary : Colors.disable,
                 paddingVertical: 5,
                 paddingHorizontal: 10,
                 borderRadius: 20,
               }}>
               2
             </Text>
-            <Text style={{ fontFamily: 'PoppinsMedium', fontSize: 14, color: Colors.text }}>
+            <Text
+              style={{
+                fontFamily: 'PoppinsMedium',
+                fontSize: 14,
+                color: colorState >= 1 ? Colors.primary : Colors.text,
+              }}>
               Photo
             </Text>
           </View>
@@ -83,17 +91,22 @@ const FormLayout = () => {
               style={{
                 fontFamily: 'PoppinsMedium',
                 fontSize: 12,
-                color: '#000000',
-                borderColor: Colors.disable,
+                color: colorState >= 2 ? '#ffffff' : '#000000',
+                borderColor: colorState >= 2 ? Colors.primary : Colors.disable,
                 borderWidth: 1,
-                backgroundColor: Colors.disable,
+                backgroundColor: colorState >= 2 ? Colors.primary : Colors.disable,
                 paddingVertical: 5,
                 paddingHorizontal: 10,
                 borderRadius: 20,
               }}>
               3
             </Text>
-            <Text style={{ fontFamily: 'PoppinsMedium', fontSize: 14, color: Colors.text }}>
+            <Text
+              style={{
+                fontFamily: 'PoppinsMedium',
+                fontSize: 14,
+                color: colorState >= 2 ? Colors.primary : Colors.text,
+              }}>
               Confirm
             </Text>
           </View>
@@ -101,7 +114,7 @@ const FormLayout = () => {
       </View>
 
       {/* All pages route*/}
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="second_form" />
       </Stack>

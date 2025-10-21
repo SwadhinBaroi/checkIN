@@ -20,9 +20,9 @@ type Props<T> = {
   errors: FieldErrors<T>;
 };
 
-const DropDownForm = ({ title, label, placeHolder, data, control, errors }: Props) => {
+const DropDownFormFull = ({ title, label, placeHolder, data, control, errors }: Props) => {
   return (
-    <View style={{ marginBottom: 24, width: '48.5%' }}>
+    <View style={{ marginBottom: 24, width: '100%' }}>
       <Text style={{ fontSize: 16, fontFamily: 'PoppinsSemi', marginBottom: 5 }}>{label}</Text>
       <Controller
         control={control}
@@ -60,7 +60,7 @@ const DropDownForm = ({ title, label, placeHolder, data, control, errors }: Prop
   );
 };
 
-export default DropDownForm;
+export default DropDownFormFull;
 
 const styles = StyleSheet.create({
   dropdown: {

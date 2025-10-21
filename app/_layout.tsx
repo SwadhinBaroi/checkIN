@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { isLoaded, useFonts } from 'expo-font';
 import { useEffect } from 'react';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -10,6 +11,7 @@ export default function RootLayout() {
     PoppinsMedium: require('@/assets/fonts/Poppins-Medium.ttf'),
     PoppinsSemi: require('@/assets/fonts/Poppins-SemiBold.ttf'),
     PoppinsBold: require('@/assets/fonts/Poppins-Bold.ttf'),
+    PoppinsLight: require('@/assets/fonts/Poppins-Light.ttf'),
   });
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="(form)" />
     </Stack>

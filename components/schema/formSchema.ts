@@ -1,11 +1,12 @@
 import { z } from 'zod';
 
 export const formSchema = z.object({
-  fullName: z.string(),
+  fullName: z.string().min(1, 'Full Name must be required'),
+
   gender: z.enum(['male', 'female', 'non_binary', 'other']),
-  dateOfBirth: z.string(), // ideally use a date type or a string in ISO format
+  dateOfBirth: z.date(),
   pronouns: z.enum(['he_him', 'she_her', 'they_them', 'other']),
-  medicaId: z.string().length(9, 'Medica ID must be 9 digits'),
+  medicaId: z.string().length(9, 'MEDICAID must be 9 digits'),
   idCard: z.enum(['yes', 'no', 'lost']),
   insurance: z.enum(['humana', 'aetna', 'magellan', 'anthem', 'sentara', 'united']),
   race: z.enum([
@@ -19,7 +20,6 @@ export const formSchema = z.object({
     'hawaiian_pacific_islander',
   ]),
 
-  preferedArea: z.enum(['yes', 'no', 'lost']),
   employed: z.enum(['yes', 'no']),
   shower: z.enum(['yes', 'no']),
   hungry: z.enum(['yes', 'no']),
@@ -33,7 +33,7 @@ export const formSchema = z.object({
   state: z.string(),
   city: z.string(),
   zipCode: z.string().length(5, 'Zip code must be 5 digits'),
-  serviceArea: z.enum(['downtown', 'ghent', 'chesapeake', 'portsmouth', 'other']),
+  serviceArea: z.enum(['richmond', 'east_end', 'chesterfield', 'henrico']),
 });
 
 export type FormData = z.infer<typeof formSchema>;

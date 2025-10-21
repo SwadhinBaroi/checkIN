@@ -2,8 +2,9 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useFormStore } from '@/store/store';
+import { formatDate } from '@/util/dateFormat';
 
-const DatePick = forwardRef((props, ref) => {
+const DatePick = forwardRef(({ setValue, fieldName }, ref) => {
   useImperativeHandle(ref, () => {
     return {
       showDatePicker,
@@ -24,6 +25,7 @@ const DatePick = forwardRef((props, ref) => {
   const handleConfirm = (date) => {
     setFormData('dateOfBirth', date);
     hideDatePicker();
+    setValue(fieldName, date, { shouldValidate: true });
   };
 
   return (

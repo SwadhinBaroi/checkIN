@@ -43,10 +43,11 @@ export const insuranceData: OptionType[] = [
   { label: 'United', value: 'united' },
 ];
 
-export const preferredAreaData: OptionType[] = [
-  { label: 'YES', value: 'yes' },
-  { label: 'NO', value: 'no' },
-  { label: 'LOST/STOLEN', value: 'lost' },
+export const serviceAreaData: OptionType[] = [
+  { label: 'Richmond', value: 'richmond' },
+  { label: 'East End', value: 'east_end' },
+  { label: 'Chesterfield', value: 'chesterfield' },
+  { label: 'Henrico', value: 'henrico' },
 ];
 
 export const employedData: OptionType[] = [

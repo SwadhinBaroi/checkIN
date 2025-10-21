@@ -8,12 +8,20 @@ type Props<T> = {
   placeHolder: string;
   control: Control<T>;
   errors: FieldErrors<T>;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'number-pad';
 };
 
-const InputForm = ({ title, label, placeHolder, control, errors }: Props) => {
-  console.log('title in input form', title);
-  console.log('label in input form', label);
-  console.log('placeHolder in input form', placeHolder);
+const InputForm = ({
+  title,
+  label,
+  placeHolder,
+  control,
+  errors,
+  keyboardType = 'default',
+}: Props) => {
+  // console.log('title in input form', title);
+  // console.log('label in input form', label);
+  // console.log('placeHolder in input form', placeHolder);
 
   // const page1Schema = formSchema.pick({
   //   fullName: true,
@@ -43,8 +51,10 @@ const InputForm = ({ title, label, placeHolder, control, errors }: Props) => {
               value={value}
               onChangeText={onChange}
               placeholderTextColor="#999"
-              autoCapitalize="none"
+              autoCorrect={false}
+              autoCapitalize="words"
               spellCheck={false}
+              keyboardType={keyboardType}
               style={{
                 borderWidth: 1,
                 borderColor: errors[title] ? 'red' : '#FFDE59',

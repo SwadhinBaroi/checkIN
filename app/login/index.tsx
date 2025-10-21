@@ -25,7 +25,6 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginData) => {
-    console.log('Form Data: ', data);
     router.replace('/(form)');
   };
 
@@ -54,7 +53,9 @@ const Login = () => {
         <View style={{ width: '72%', alignSelf: 'center' }}>
           {/* Passcode Input */}
           <View style={{ marginBottom: 30 }}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Enter Passcode</Text>
+            <Text style={{ fontSize: 18, fontFamily: 'PoppinsRegular', marginBottom: 8 }}>
+              Enter Passcode
+            </Text>
             <Controller
               control={control}
               name={code}
@@ -65,16 +66,18 @@ const Login = () => {
                     value={value}
                     onChangeText={onChange}
                     placeholderTextColor="#999"
-                    autoCorrect={false} // 🔹 disables autocorrect
-                    autoCapitalize="none" // 🔹 disables automatic capitalization
-                    spellCheck={false} // 🔹 disables spelling suggestions
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    spellCheck={false}
                     style={{
                       borderWidth: 1,
                       borderColor: errors[code] ? 'red' : '#FFDE59',
                       padding: 15,
                       marginBottom: 5,
-                      borderRadius: 6,
-                      fontSize: 14,
+                      borderRadius: 10,
+                      fontSize: 18,
+                      fontFamily: 'PoppinsRegular',
+                      backgroundColor: 'white',
                     }}
                   />
                   {errors[code] && <Text style={{ color: 'red' }}>{errors[code].message}</Text>}
@@ -85,7 +88,9 @@ const Login = () => {
 
           {/* Passwod Input */}
           <View style={{ marginBottom: 30 }}>
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Enter Password</Text>
+            <Text style={{ fontSize: 18, fontFamily: 'PoppinsRegular', marginBottom: 8 }}>
+              Enter Password
+            </Text>
             <Controller
               control={control}
               name="password"
@@ -96,13 +101,18 @@ const Login = () => {
                     value={value}
                     onChangeText={onChange}
                     placeholderTextColor="#999"
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    spellCheck={false}
                     style={{
                       borderWidth: 1,
                       borderColor: errors.passcode ? 'red' : '#FFDE59',
                       padding: 15,
                       marginBottom: 5,
-                      borderRadius: 6,
-                      fontSize: 14,
+                      borderRadius: 10,
+                      fontSize: 18,
+                      fontFamily: 'PoppinsRegular',
+                      backgroundColor: 'white',
                     }}
                   />
                   {errors.password && (
@@ -123,20 +133,21 @@ const Login = () => {
               paddingVertical: 10,
               borderRadius: 6,
               backgroundColor: '#000000',
+              marginTop: 10,
             }}
             activeOpacity={0.8}>
             <Text
               style={{
                 color: '#fff',
                 fontSize: 22,
-                fontWeight: '600',
+                fontFamily: 'PoppinsSemi',
                 textAlign: 'center',
               }}>
               Log in
             </Text>
           </TouchableOpacity>
 
-          <Text style={{ textAlign: 'center', fontSize: 14, margin: 40, fontWeight: 300 }}>
+          <Text style={{ textAlign: 'center', fontSize: 16, margin: 40, fontWeight: 300 }}>
             Super Admin access only or Agency Authroized use only
           </Text>
         </View>

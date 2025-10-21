@@ -20,3 +20,13 @@ export const useFormStore = create<FormStore>((set) => ({
       formData: { ...state.formData, [field]: value },
     })),
 }));
+
+interface LayoutStore {
+  colorState: number;
+  setColorState: (val: number) => void;
+}
+
+export const useLayoutStore = create<LayoutStore>((set) => ({
+  colorState: 0,
+  setColorState: (val) => set({ colorState: val }),
+}));

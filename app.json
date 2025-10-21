@@ -19,6 +19,15 @@
           "cameraPermission": "We need access to your camera to take pictures.",
           "microphonePermission": "We need access to your microphone for video capture."
         }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/splash.png",
+
+          "imageWidth": 200
+        }
       ]
     ],
     "experiments": {
@@ -28,22 +37,34 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.checkin"
+      "bundleIdentifier": "com.anonymous.checkin",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.checkin"
+      "package": "com.anonymous.checkin",
+      "permissions": ["android.permission.RECORD_AUDIO"]
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d68ef198-9510-4c46-a7bd-5e7b5bf90ccb"
+      }
     }
   }
 }
+
+// "splash": {
+//   "image": "./assets/",
+//   "resizeMode": "contain",
+//   "backgroundColor": "#ffffff"
+// },
