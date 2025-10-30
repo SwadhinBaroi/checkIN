@@ -32,6 +32,7 @@ export const raceData: OptionType[] = [
   { label: 'Asian', value: 'asian' },
   { label: 'Middle Eastern', value: 'middle_eastern' },
   { label: 'Hawaiian/Pacific Islander', value: 'hawaiian_pacific_islander' },
+  { label: 'Other', value: 'other' },
 ];
 
 export const insuranceData: OptionType[] = [
@@ -41,18 +42,28 @@ export const insuranceData: OptionType[] = [
   { label: 'Anthem', value: 'anthem' },
   { label: 'Sentara', value: 'sentara' },
   { label: 'United', value: 'united' },
+  { label: "I Don't Know", value: 'dont_know' },
 ];
 
 export const serviceAreaData: OptionType[] = [
-  { label: 'Richmond', value: 'richmond' },
+  { label: 'Petersburg', value: 'petersburg' },
   { label: 'East End', value: 'east_end' },
+  { label: 'West End', value: 'west_end' },
   { label: 'Chesterfield', value: 'chesterfield' },
-  { label: 'Henrico', value: 'henrico' },
+  { label: 'Chester', value: 'chester' },
+  { label: 'Colonial Heights', value: 'colonial_heights' },
+  { label: 'North side Richmond', value: 'north_side_richmond' },
+  { label: 'Southside Richmond', value: 'southside_richmond' },
+  { label: 'Church Hill', value: 'church_hill' },
+  { label: 'Ashland', value: 'ashland' },
+  { label: 'Hopewell', value: 'hopewell' },
 ];
 
 export const employedData: OptionType[] = [
   { label: 'YES', value: 'yes' },
   { label: 'NO', value: 'no' },
+  { label: 'DISABLED', value: 'disabled' },
+  { label: 'RETIRED', value: 'retired' },
 ];
 
 export const showerData: OptionType[] = [
@@ -68,4 +79,11 @@ export const hungryData: OptionType[] = [
 export const homelessData: OptionType[] = [
   { label: 'YES', value: 'yes' },
   { label: 'NO', value: 'no' },
+];
+
+export const stateNamesData: OptionType[] = [
+  { label: 'Virginia', value: 'VA' },
+  { label: 'Maryland', value: 'MD' },
+  { label: 'North Carolina', value: 'NC' },
+  { label: 'South Carolina', value: 'SC' },
 ];

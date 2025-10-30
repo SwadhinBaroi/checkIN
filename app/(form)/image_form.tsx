@@ -14,7 +14,7 @@ import Colors from '../constants/colors';
 import * as ImagePicker from 'expo-image-picker';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useRouter } from 'expo-router';
-import { useLayoutStore } from '@/store/store';
+import { useLayoutStore, useFormStore, useLoginStore } from '@/store/store';
 
 const ImageForm = () => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
@@ -22,6 +22,8 @@ const ImageForm = () => {
   const [image, setImage] = useState(null);
   const { colorState, setColorState } = useLayoutStore();
   const router = useRouter();
+  const { submitFormData } = useFormStore();
+  const accessToken = useLoginStore.getState().accessToken;
 
   // const changeState = () => {
   //   setImage(true);
@@ -61,6 +63,13 @@ const ImageForm = () => {
     const { width, height } = event.nativeEvent.layout;
     console.log(width, height);
     setButtonLayout({ width, height });
+  };
+
+  const submitForm = async () => {
+    setColorState(colorState + 1);
+    console.log('Access Token in Image Form:', accessToken);
+    await submitFormData(accessToken);
+    router.push('/(form)/thankyou');
   };
 
   return (
@@ -271,10 +280,7 @@ const ImageForm = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onLayout={handleLayoutButton}
-            onPress={() => {
-              setColorState(colorState + 1);
-              router.push('/(form)/thankyou');
-            }}
+            onPress={submitForm}
             style={{
               borderWidth: 1,
               borderColor: '#000',

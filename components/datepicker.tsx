@@ -23,7 +23,9 @@ const DatePick = forwardRef(({ setValue, fieldName }, ref) => {
   };
 
   const handleConfirm = (date) => {
-    setFormData('dateOfBirth', date);
+    const formatedDate = formatDate(date);
+    console.log('I am from datePicker', formatedDate);
+    setFormData('dateOfBirth', formatedDate);
     hideDatePicker();
     setValue(fieldName, date, { shouldValidate: true });
   };

@@ -13,8 +13,10 @@ import { LoginData, loginSchema } from '@/components/schema/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Logo from '@/assets/logo.svg';
 import { useRouter } from 'expo-router';
+import { useLoginStore } from '@/store/store';
 
 const Login = () => {
+  const { submitLogin } = useLoginStore();
   const router = useRouter();
   const {
     control,
@@ -24,8 +26,12 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginData) => {
-    router.replace('/(form)');
+  const onSubmit = async (data: LoginData) => {
+    console.log('Login Data:', data);
+    if (data.passcode && data.password) {
+      await submitLogin(data);
+      router.replace('/(form)');
+    }
   };
 
   const code = 'passcode';

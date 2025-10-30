@@ -1,8 +1,12 @@
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Colors from '../constants/colors';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useRouter } from 'expo-router';
 
 const ThankYou = () => {
+  const router = useRouter();
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.background_light }}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -35,6 +39,35 @@ const ThankYou = () => {
             Please take a seat in the observation room on the left.
           </Text>
         </View>
+        <TouchableOpacity
+          onPress={() => {
+            router.replace('/(form)');
+          }}
+          style={{
+            borderWidth: 1,
+            borderColor: '#000',
+            alignSelf: 'center',
+            paddingHorizontal: 40,
+            paddingVertical: 15,
+            borderRadius: 6,
+            backgroundColor: '#000000',
+            marginTop: 50,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+          }}
+          activeOpacity={0.8}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 22,
+              fontFamily: 'PoppinsSemi',
+              textAlign: 'center',
+            }}>
+            Go to Home
+          </Text>
+          <FontAwesome name="home" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </View>
   );

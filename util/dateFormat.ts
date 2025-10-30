@@ -5,5 +5,5 @@ export function formatDate(dateString: string) {
   const day = String(date.getDate()).padStart(2, '0');
   const year = date.getFullYear();
 
-  return `${month}-${day}-${year}`;
+  return `${year}-${month}-${day}`;
 }

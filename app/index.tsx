@@ -27,7 +27,7 @@ export default function Index() {
         </TouchableOpacity>
 
         <TouchableOpacity style={{ backgroundColor: 'black', padding: 10, borderRadius: 10 }}>
-          <Link href="/(form)">
+          <Link href="/(form)/image_form">
             <Text
               style={{
                 color: 'white',

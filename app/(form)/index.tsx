@@ -47,10 +47,10 @@ const FirstForm = () => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
 
   console.log('form data from store', formData);
-  let birthDay = '';
-  if (formData.dateOfBirth !== null) {
-    birthDay = formatDate(formData.dateOfBirth);
-  }
+  let birthDay = formData.dateOfBirth;
+  // if (formData.dateOfBirth !== null) {
+  //   birthDay = formatDate(formData.dateOfBirth);
+  // }
   console.log('formatted date', birthDay);
 
   const page1Schema = formSchema.pick({
@@ -88,7 +88,7 @@ const FirstForm = () => {
 
   const onSubmit = (data) => {
     console.log('page 1 data', data);
-    // setFormData({ ...formData, ...data });
+    setFormData(data);
     router.push('/(form)/second_form');
   };
 

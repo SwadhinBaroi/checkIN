@@ -35,6 +35,7 @@ import {
   pronounsData,
   raceData,
   showerData,
+  stateNamesData,
 } from '@/util/dropdowndata';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -76,9 +77,9 @@ const SecondForm = () => {
     setButtonLayout({ width, height });
   };
   const onSubmit = (data) => {
-    console.log('page 1 data', data);
+    console.log('page 2 data', data);
     setColorState(colorState + 1);
-    // setFormData({ ...formData, ...data });
+    setFormData(data);
     router.push('/(form)/image_form');
   };
 
@@ -159,10 +160,11 @@ const SecondForm = () => {
                 control={control}
                 errors={errors}
               />
-              <InputForm
+              <DropDownForm
                 title={'state'}
                 label={'STATE *'}
                 placeHolder={'Enter State'}
+                data={stateNamesData}
                 control={control}
                 errors={errors}
               />
