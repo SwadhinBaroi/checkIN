@@ -7,3 +7,17 @@ export function formatDate(dateString: string) {
 
   return `${year}-${month}-${day}`;
 }
+
+export function getTimeDifference(submittedTime: string): string {
+  const submitted = new Date(submittedTime);
+  const now = new Date();
+
+  const diffMs = now.getTime() - submitted.getTime(); // difference in milliseconds
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+  const formattedHours = String(diffHours).padStart(2, '0');
+  const formattedMinutes = String(diffMinutes).padStart(2, '0');
+
+  return `${formattedHours}:${formattedMinutes}`;
+}

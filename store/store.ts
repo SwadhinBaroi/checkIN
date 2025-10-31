@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
-import { baseURL } from 'config';
+import { baseURL, wsBaseURL } from 'config';
 import { formatDate } from '@/util/dateFormat';
 
 interface FormData {
@@ -218,5 +218,111 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
       console.log('Login failed:', errorMessage);
       // set({ error: error.error, isLoading: false });
     }
+  },
+}));
+
+// Showing waiting list
+
+interface Client {
+  id: string;
+  name: string;
+  image: string;
+  form_submitted_time: string;
+}
+
+interface ClientStore {
+  clients: Client[];
+  socket: WebSocket | null;
+  isLoading: boolean;
+  error: string | null;
+
+  fetchClients: (accessToken: string) => Promise<void>;
+  connectSocket: () => void;
+}
+
+export const useClientStore = create<ClientStore>((set, get) => ({
+  clients: [],
+  socket: null,
+  isLoading: false,
+  error: null,
+
+  // Featch user by http
+  fetchClients: async (accessToken) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const response = await axios.get(`${baseURL}/queue/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          RoniAuthorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = response.data;
+      console.log('User list data', data);
+      set({
+        clients: data.map((item: any) => ({
+          id: item.id,
+          name: item.patient.fname,
+          image: item.patient.image,
+          form_submitted_time: item.check_in_time,
+        })),
+      });
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || // ✅ from your backend
+        error.message || // generic error
+        `Don't get client data`;
+      console.log('User Data Not found:', errorMessage);
+      // set({ error: error.error, isLoading: false });
+    }
+  },
+
+  connectSocket: () => {
+    const socket = new WebSocket(wsBaseURL);
+
+    socket.onopen = () => {
+      console.log('WebSocket Connected');
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        // console.log(data);
+
+        switch (data.event) {
+          case 'PATIENT_ADDED': {
+            set((state) => ({
+              clients: [
+                ...state.clients,
+                {
+                  id: data.id,
+                  name: data.patient.fname,
+                  image: data.patient.image,
+                  form_submitted_time: data.check_in_time || '',
+                },
+              ],
+            }));
+            break;
+          }
+          case 'PATIENT_COMPLETED': {
+            set((state) => ({
+              clients: state.clients.filter((u) => u.id !== data.id),
+            }));
+            break;
+          }
+
+          default:
+            console.log('Unknown message type:', data);
+        }
+      } catch (error: any) {
+        console.log('Error parsing message', error);
+      }
+    };
+
+    socket.onclose = () => console.log('Socket Closed');
+    socket.onerror = (error) => console.log('WebSocket error:', error);
+
+    set({ socket });
   },
 }));

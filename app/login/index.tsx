@@ -30,7 +30,7 @@ const Login = () => {
     console.log('Login Data:', data);
     if (data.passcode && data.password) {
       await submitLogin(data);
-      router.replace('/(form)');
+      router.replace('/admin');
     }
   };
 
