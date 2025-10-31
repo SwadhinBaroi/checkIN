@@ -270,9 +270,7 @@ export const useClientStore = create<ClientStore>((set, get) => ({
       });
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.message || // ✅ from your backend
-        error.message || // generic error
-        `Don't get client data`;
+        error.response?.data?.message || error.message || `Don't get client data`;
       console.log('User Data Not found:', errorMessage);
       // set({ error: error.error, isLoading: false });
     }
@@ -303,12 +301,14 @@ export const useClientStore = create<ClientStore>((set, get) => ({
                 },
               ],
             }));
+            console.log('Patient added to the client list');
             break;
           }
           case 'PATIENT_COMPLETED': {
             set((state) => ({
               clients: state.clients.filter((u) => u.id !== data.id),
             }));
+            console.log('Patient remove to the client list');
             break;
           }
 
@@ -324,5 +324,47 @@ export const useClientStore = create<ClientStore>((set, get) => ({
     socket.onerror = (error) => console.log('WebSocket error:', error);
 
     set({ socket });
+  },
+}));
+
+// --
+// --
+// --
+// Next Patient
+// --
+// --
+// --
+
+interface useNextClientStore {
+  isLoading: boolean;
+  error: string | null;
+  callNextClient: (accessToken: string) => Promise<void>;
+}
+
+export const useNextClientStore = create<useNextClientStore>((set, get) => ({
+  isLoading: false,
+  error: null,
+
+  callNextClient: async (accessToken) => {
+    set({ isLoading: true, error: null });
+    const reqData = {
+      action: 'call_next',
+    };
+    try {
+      const response = await axios.post(`${baseURL}/doctors/`, reqData, {
+        headers: {
+          'Content-Type': 'application/json',
+          RoniAuthorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = response.data;
+      console.log('Deleted data by clicking next', data);
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || error.message || `Next Client call failed`;
+      console.log('User Data Not found:', errorMessage);
+      // set({ error: error.error, isLoading: false });
+    }
   },
 }));

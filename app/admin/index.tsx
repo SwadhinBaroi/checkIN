@@ -4,11 +4,12 @@ import Logo from '@/assets/logo.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useClientStore, useLoginStore } from '@/store/store';
+import { useClientStore, useLoginStore, useNextClientStore } from '@/store/store';
 import { getTimeDifference } from '@/util/dateFormat';
 
 const index = () => {
   const { fetchClients, connectSocket, clients } = useClientStore();
+  const { callNextClient } = useNextClientStore();
   const accessToken = useLoginStore.getState().accessToken;
   const [, setTick] = useState(0);
 
@@ -24,6 +25,10 @@ const index = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleNext = async () => {
+    await callNextClient(accessToken);
+  };
 
   return (
     <SafeAreaView
@@ -52,11 +57,11 @@ const index = () => {
                 marginTop: 25,
                 marginBottom: 100,
               }}>
-              Jhon Doe
+              {clients[0]?.name}
             </Text>
             <View style={{ width: 180 }}>
               <TouchableOpacity
-                onPress={() => {}}
+                onPress={handleNext}
                 style={{
                   borderWidth: 1,
                   borderColor: '#000',
@@ -91,8 +96,8 @@ const index = () => {
               <Ionicons name="return-down-back" size={28} color="black" />
             </View>
 
-            {clients.length !== 0 &&
-              clients.map((item, index) => (
+            {clients?.length > 1 &&
+              clients.slice(1).map((item, index) => (
                 <View
                   style={{
                     backgroundColor: item?.id % 2 === 0 ? Colors.primary : '#000000',
@@ -118,7 +123,9 @@ const index = () => {
                       }}>
                       <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
                         <Image
-                          source={require('@/assets/person2.jpg')}
+                          source={
+                            item.image ? { uri: item.image } : require('@/assets/person2.jpg')
+                          }
                           style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
                         />
                       </View>
