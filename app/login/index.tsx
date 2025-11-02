@@ -7,15 +7,17 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { LoginData, loginSchema } from '@/components/schema/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Logo from '@/assets/logo.svg';
 import { useRouter } from 'expo-router';
 import { useLoginStore } from '@/store/store';
+import Feather from '@expo/vector-icons/Feather';
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { submitLogin } = useLoginStore();
   const router = useRouter();
   const {
@@ -32,6 +34,10 @@ const Login = () => {
       await submitLogin(data);
       router.replace('/admin');
     }
+  };
+
+  const handlePassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
   const code = 'passcode';
@@ -101,7 +107,7 @@ const Login = () => {
               control={control}
               name="password"
               render={({ field: { onChange, value } }) => (
-                <>
+                <View>
                   <TextInput
                     placeholder="Enter Password"
                     value={value}
@@ -110,6 +116,7 @@ const Login = () => {
                     autoCorrect={false}
                     autoCapitalize="none"
                     spellCheck={false}
+                    secureTextEntry={!showPassword}
                     style={{
                       borderWidth: 1,
                       borderColor: errors.passcode ? 'red' : '#FFDE59',
@@ -121,10 +128,25 @@ const Login = () => {
                       backgroundColor: 'white',
                     }}
                   />
+                  <TouchableOpacity
+                    onPress={handlePassword}
+                    style={{
+                      position: 'absolute',
+                      right: 25,
+                      top: '50%',
+                      transform: [{ translateY: -13.5 }],
+                    }}>
+                    {showPassword ? (
+                      <Feather name="eye" size={27} color="#999" />
+                    ) : (
+                      <Feather name="eye-off" size={27} color="#999" />
+                    )}
+                  </TouchableOpacity>
+
                   {errors.password && (
                     <Text style={{ color: 'red' }}>{errors.password.message}</Text>
                   )}
-                </>
+                </View>
               )}
             />
           </View>

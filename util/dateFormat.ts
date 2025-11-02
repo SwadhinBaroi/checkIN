@@ -23,10 +23,10 @@ export function formatDate(dateString: string) {
 // }
 
 export function getTimeDifference(submittedTime: string): string {
-  const submitted = new Date(submittedTime);
-  const now = new Date();
+  const submitted = new Date(submittedTime).getTime();
+  const now = new Date().getTime();
 
-  const diffMs = now.getTime() - submitted.getTime(); // difference in milliseconds
+  const diffMs = now - submitted;
 
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
