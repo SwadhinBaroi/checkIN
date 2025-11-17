@@ -9,6 +9,7 @@ import { getTimeDifference } from '@/util/dateFormat';
 
 const index = () => {
   const { fetchClients, connectSocket, clients } = useClientStore();
+  const { callNextClient } = useNextClientStore();
   const accessToken = useLoginStore.getState().accessToken;
   const [, setTick] = useState(0);
 
@@ -25,59 +26,75 @@ const index = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleNext = async () => {
+    await callNextClient(accessToken);
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: Colors.background_light, alignItems: 'center' }}>
-      <View style={{ flex: 1, width: '90%', marginTop: 100 }}>
+      <View style={{ flex: 1, width: '90%', marginTop: 80 }}>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
             <Logo width={120} height={120} />
           </View>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <View style={{ borderColor: Colors.accent, borderWidth: 1, borderRadius: 100 }}>
-              <Image
-                source={require('@/assets/person2.jpg')}
-                style={{ height: 150, width: 150, overflow: 'hidden', borderRadius: 100 }}
-              />
+          {clients.length === 0 ? (
+            <View style={{ justifyContent: 'center' }}>
+              <Text style={{ fontSize: 30, fontFamily: 'InterBold', color: Colors.primary }}>
+                No Patient Yet !
+              </Text>
             </View>
-            <Text
+          ) : (
+            <View
               style={{
-                fontFamily: 'InterBold',
-                fontSize: 48,
-                marginTop: 25,
-                marginBottom: 100,
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              {clients[0]?.name}
-            </Text>
-            {/* <View style={{ width: 180 }}>
-              <TouchableOpacity
-
+              <View style={{ borderColor: Colors.accent, borderWidth: 1, borderRadius: 100 }}>
+                <Image
+                  source={
+                    clients[0].image
+                      ? { uri: `https://scbhscrc.cloud${clients[0].image}` }
+                      : require('@/assets/person2.jpg')
+                  }
+                  style={{ height: 150, width: 150, overflow: 'hidden', borderRadius: 100 }}
+                />
+              </View>
+              <Text
                 style={{
-                  borderWidth: 1,
-                  borderColor: '#000',
-                  borderRadius: 6,
-                  backgroundColor: '#000000',
-                  marginTop: 10,
-                  paddingVertical: 10,
-                }}
-                activeOpacity={0.8}>
-                <Text
+                  fontFamily: 'InterBold',
+                  fontSize: 48,
+                  marginTop: 25,
+                  marginBottom: 100,
+                }}>
+                {clients[0]?.name}
+              </Text>
+              {/* <View style={{ width: 180 }}>
+                <TouchableOpacity
+                  onPress={handleNext}
                   style={{
-                    color: '#fff',
-                    fontSize: 22,
-                    fontFamily: 'PoppinsSemi',
-                    textAlign: 'center',
-                  }}>
-                  Next
-                </Text>
-              </TouchableOpacity>
-            </View> */}
-          </View>
+                    borderWidth: 1,
+                    borderColor: '#000',
+                    borderRadius: 6,
+                    backgroundColor: '#000000',
+                    marginTop: 10,
+                    paddingVertical: 10,
+                  }}
+                  activeOpacity={0.8}>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 22,
+                      fontFamily: 'PoppinsSemi',
+                      textAlign: 'center',
+                    }}>
+                    Next
+                  </Text>
+                </TouchableOpacity>
+              </View> */}
+            </View>
+          )}
           <View>
             <View
               style={{
@@ -101,7 +118,7 @@ const index = () => {
                       paddingVertical: 20,
                       borderRadius: 10,
                       marginBottom: 10,
-                      width: 380,
+                      width: 350,
                     }}
                     key={index}>
                     <View
@@ -120,15 +137,29 @@ const index = () => {
                         <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
                           <Image
                             source={
-                              item.image ? { uri: item.image } : require('@/assets/person2.jpg')
+                              item.image
+                                ? {
+                                    uri: `https://scbhscrc.cloud${item.image}`,
+                                  }
+                                : require('@/assets/person2.jpg')
                             }
                             style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
                           />
                         </View>
                         <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                          {item.name}
+                          {(() => {
+                            const words = item.name?.trim().split(' ').filter(Boolean) || [];
+                            if (words.length === 0) return '';
+                            if (words[0].length === 3 && words.length > 1) {
+                              // If first word is 3 letters, show first + second word
+                              return `${words[0]} ${words[1]}`;
+                            }
+                            // Otherwise, just show the first word
+                            return words[0];
+                          })()}
                         </Text>
                       </View>
+
                       <Text
                         style={{
                           fontFamily: 'PoppinsMedium',
