@@ -2,8 +2,15 @@ import { Stack } from 'expo-router';
 import { isLoaded, useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { View } from 'react-native';
+import { useGlobalStore } from '@/store/globalStore';
+import AppLoader from '@/components/apploader';
+import ToastManager from 'toastify-react-native';
+import { toastConfig } from '@/util/toastconfig';
 
 export default function RootLayout() {
+  const isGlobalLoading = useGlobalStore((state) => state.isGlobalLoading);
+
   const [fontsLoaded] = useFonts({
     InterRegular: require('@/assets/fonts/Inter_24pt-Regular.ttf'),
     InterBold: require('@/assets/fonts/Inter_24pt-Bold.ttf'),
@@ -23,9 +30,13 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(form)" />
-    </Stack>
+    <View style={{ flex: 1 }}>
+      <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(form)" />
+      </Stack>
+      {isGlobalLoading && <AppLoader />}
+      <ToastManager config={{ toastConfig }} />
+    </View>
   );
 }

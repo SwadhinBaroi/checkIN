@@ -181,7 +181,7 @@ const FirstForm = () => {
               <DropDownForm
                 title={'gender'}
                 label={'GENDER *'}
-                placeHolder={'Select your gernder'}
+                placeHolder={'Select your gender'}
                 data={gernderData}
                 control={control}
                 errors={errors}

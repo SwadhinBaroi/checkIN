@@ -15,6 +15,8 @@ import * as ImagePicker from 'expo-image-picker';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useRouter } from 'expo-router';
 import { useLayoutStore, useFormStore, useLoginStore } from '@/store/store';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { Toast } from 'toastify-react-native';
 
 const ImageForm = () => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });
@@ -22,7 +24,7 @@ const ImageForm = () => {
   const [image, setImage] = useState(null);
   const { colorState, setColorState } = useLayoutStore();
   const router = useRouter();
-  const { submitFormData } = useFormStore();
+  const { submitFormData, setFormData } = useFormStore();
   const accessToken = useLoginStore.getState().accessToken;
 
   // const changeState = () => {
@@ -48,9 +50,22 @@ const ImageForm = () => {
       cameraType: ImagePicker.CameraType.front,
     });
 
-    if (result.assets[0].type !== 'image') return;
-    console.log(result.assets[0].uri);
-    setImage(result.assets[0].uri);
+    if (result?.canceled || result.assets[0].type !== 'image') return;
+    const originalUri = result.assets[0].uri;
+    setImage(originalUri);
+    console.log(originalUri);
+
+    const resized = await ImageManipulator.manipulateAsync(
+      originalUri,
+      [{ resize: { width: 1080 } }], // max width 1080px, height auto
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+
+    setFormData('image', {
+      uri: resized.uri,
+      type: 'image/jpeg',
+      name: 'profile_image.jpg',
+    });
   };
 
   const handleLayout = (event) => {
@@ -68,7 +83,12 @@ const ImageForm = () => {
   const submitForm = async () => {
     setColorState(colorState + 1);
     console.log('Access Token in Image Form:', accessToken);
+    if (image === null) {
+      Toast.error('You have click the image first');
+      return;
+    }
     await submitFormData(accessToken);
+    setImage(null);
     router.push('/(form)/thankyou');
   };
 

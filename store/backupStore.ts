@@ -3,7 +3,6 @@ import axios from 'axios';
 import { baseURL, wsBaseURL } from 'config';
 import { formatDate } from '@/util/dateFormat';
 import { useGlobalStore } from './globalStore';
-import { Toast } from 'toastify-react-native';
 
 type PickedImage = {
   uri: string;
@@ -29,7 +28,7 @@ interface FormData {
   ssn: string;
   lastKnownStreet: string;
   secondStreet: string;
-  // streetName: string;
+  streetName: string;
   state: string;
   city: string;
   zipCode: string;
@@ -39,7 +38,8 @@ interface FormData {
 
 interface FormStore {
   formData: FormData;
-
+  isLoading: boolean;
+  error: string | null;
   submitFormData: (accessToken: string) => void;
   setFormData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }
@@ -63,13 +63,16 @@ export const useFormStore = create<FormStore>((set, get) => ({
     ssn: '',
     lastKnownStreet: '',
     secondStreet: '',
-    // streetName: '',
+    streetName: '',
     state: '',
     city: '',
     zipCode: '',
     serviceArea: '',
     image: { uri: '', type: '', name: '' },
   },
+
+  isLoading: false,
+  error: null,
 
   setFormData: (fieldOrData, value) =>
     set((state) => {
@@ -92,14 +95,12 @@ export const useFormStore = create<FormStore>((set, get) => ({
     }),
 
   submitFormData: async (accessToken) => {
-    const { startLoading, stopLoading, setGlobalError } = useGlobalStore.getState();
-
+    set({ isLoading: true, error: null });
     const { formData } = get();
     console.log('Submitting form data from store:', formData);
     const formattedDate = formatDate(formData.dateOfBirth);
     console.log('It is formattedDate', formattedDate);
 
-    startLoading();
     try {
       const sendData = new FormData();
 
@@ -112,7 +113,7 @@ export const useFormStore = create<FormStore>((set, get) => ({
       sendData.append('emergency_contact', formData.emergencyContact);
       sendData.append('ssn', formData.ssn);
       sendData.append('street1', formData.secondStreet);
-      sendData.append('street2', 'No Need');
+      sendData.append('street2', 'Barishal');
       sendData.append('last_known_address', formData.lastKnownStreet);
       sendData.append('city', formData.city);
       sendData.append('state', formData.state);
@@ -143,21 +144,19 @@ export const useFormStore = create<FormStore>((set, get) => ({
       });
 
       const data = response.data;
-
       console.log('Form submission response data:', data);
+
+      set({
+        isLoading: false,
+      });
       console.log('Form submitted successfully');
-      stopLoading();
-      Toast.success('Form submitted successfully');
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || // ✅ from your backend
         error.message || // generic error
         'Form submission failed';
       console.log('Form submission failed:', errorMessage);
-
-      setGlobalError(errorMessage);
-      stopLoading();
-      Toast.error('Form Submisstion Failed, Please Do it again');
+      set({ error: errorMessage, isLoading: false });
     }
   },
 }));
@@ -193,9 +192,9 @@ type SubmitLoginResponse = {
 interface LoginStore {
   loginData: LoginData;
   accessToken: string;
-
+  isLoading: boolean;
   role: string;
-
+  error: string | null;
   // setLoginData: <K extends keyof LoginData>(field: K, value: LoginData[K]) => void;
   submitLogin: (loginDetails: LoginData) => Promise<SubmitLoginResponse>;
 }
@@ -207,10 +206,11 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
   },
   role: '',
   accessToken: `I don't know`,
+  isLoading: false,
+  error: null,
 
   submitLogin: async (loginDetails) => {
-    const { startLoading, stopLoading, setGlobalError } = useGlobalStore.getState();
-    startLoading();
+    set({ isLoading: true, error: null });
     try {
       // Api call submisstion
       console.log('Submitting login details:', loginDetails);
@@ -233,11 +233,10 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
         loginData: loginDetails,
         accessToken: data.access,
         role: data.role,
+        isLoading: false,
       });
-      stopLoading();
       console.log('Login successful, access token:', data.access);
       console.log('Login successful, Role:', data.role);
-      Toast.success('Form submitted successfully');
       return {
         success: true,
         data,
@@ -248,9 +247,7 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
         error.message || // generic error
         'Login failed';
       console.log('Login failed:', errorMessage);
-      setGlobalError(errorMessage);
-      stopLoading();
-      Toast.error('Invalid User Credential');
+      set({ isLoading: false });
       return {
         success: false,
         error: errorMessage,
@@ -328,40 +325,18 @@ export const useClientStore = create<ClientStore>((set, get) => ({
         // console.log(data);
 
         switch (data.event) {
-          // case 'PATIENT_ADDED': {
-          //   set((state) => ({
-          //     clients: [
-          //       ...state.clients,
-          //       {
-          //         id: data.id,
-          //         name: data.patient.fname,
-          //         image: data.patient.image,
-          //         form_submitted_time: data.check_in_time || '',
-          //       },
-          //     ],
-          //   }));
-          //   console.log('Patient added to the client list');
-          //   break;
-          // }
           case 'PATIENT_ADDED': {
-            if (!data.patient) break;
-
-            set((state) => {
-              const exists = state.clients.some((c) => c.id === data.id);
-              if (exists) return state;
-
-              return {
-                clients: [
-                  ...state.clients,
-                  {
-                    id: data.id,
-                    name: data.patient.fname,
-                    image: data.patient.image,
-                    form_submitted_time: data.check_in_time || '',
-                  },
-                ],
-              };
-            });
+            set((state) => ({
+              clients: [
+                ...state.clients,
+                {
+                  id: data.id,
+                  name: data.patient.fname,
+                  image: data.patient.image,
+                  form_submitted_time: data.check_in_time || '',
+                },
+              ],
+            }));
             console.log('Patient added to the client list');
             break;
           }

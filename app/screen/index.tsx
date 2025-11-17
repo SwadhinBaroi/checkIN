@@ -1,11 +1,30 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '@/assets/logo.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useClientStore, useLoginStore, useNextClientStore } from '@/store/store';
+import { getTimeDifference } from '@/util/dateFormat';
 
 const index = () => {
+  const { fetchClients, connectSocket, clients } = useClientStore();
+  const accessToken = useLoginStore.getState().accessToken;
+  const [, setTick] = useState(0);
+
+  console.log('Here is the all client list: ', clients);
+
+  useEffect(() => {
+    fetchClients(accessToken);
+    connectSocket();
+
+    const interval = setInterval(() => {
+      setTick((t) => t + 1); // dummy state update
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: Colors.background_light, alignItems: 'center' }}>
@@ -33,11 +52,11 @@ const index = () => {
                 marginTop: 25,
                 marginBottom: 100,
               }}>
-              Jhon Doe
+              {clients[0]?.name}
             </Text>
             {/* <View style={{ width: 180 }}>
               <TouchableOpacity
-                onPress={() => {}}
+
                 style={{
                   borderWidth: 1,
                   borderColor: '#000',
@@ -72,305 +91,56 @@ const index = () => {
               <Ionicons name="return-down-back" size={28} color="black" />
             </View>
 
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
+            <View style={{ height: '90%', overflow: 'hidden' }}>
+              {clients?.length > 1 &&
+                clients.slice(1).map((item, index) => (
+                  <View
+                    style={{
+                      backgroundColor: item?.id % 2 === 0 ? Colors.primary : '#000000',
+                      paddingHorizontal: 20,
+                      paddingVertical: 20,
+                      borderRadius: 10,
+                      marginBottom: 10,
+                      width: 380,
+                    }}
+                    key={index}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          gap: 20,
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                        <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
+                          <Image
+                            source={
+                              item.image ? { uri: item.image } : require('@/assets/person2.jpg')
+                            }
+                            style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
+                          />
+                        </View>
+                        <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
+                          {item.name}
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: 'PoppinsMedium',
+                          color: 'white',
+                          fontSize: 26,
+                          textAlign: 'right',
+                        }}>
+                        {getTimeDifference(item.form_submitted_time)}
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: Colors.primary,
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person2.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Jhon Doe
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#000000',
-                paddingHorizontal: 20,
-                paddingVertical: 15,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <View style={{ borderColor: 'white', borderWidth: 1, borderRadius: 100 }}>
-                    <Image
-                      source={require('@/assets/person3.jpg')}
-                      style={{ height: 50, width: 50, overflow: 'hidden', borderRadius: 100 }}
-                    />
-                  </View>
-                  <Text style={{ fontFamily: 'PoppinsMedium', color: 'white', fontSize: 24 }}>
-                    Sarah Ali
-                  </Text>
-                </View>
-                <Text style={{ fontFamily: 'InterRegular', color: 'white', fontSize: 26 }}>
-                  1hr:10m
-                </Text>
-              </View>
+                ))}
             </View>
           </View>
         </View>

@@ -53,7 +53,7 @@ const SecondForm = () => {
     ssn: true,
     lastKnownStreet: true,
     secondStreet: true,
-    streetName: true,
+    // streetName: true,
     state: true,
     city: true,
     zipCode: true,
@@ -146,13 +146,13 @@ const SecondForm = () => {
               />
               <InputForm
                 title={'secondStreet'}
-                label={'SECOND STREET *'}
+                label={'SECOND STREET'}
                 placeHolder={'Second Street'}
                 control={control}
                 errors={errors}
               />
             </View>
-            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+            {/* <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <InputForm
                 title={'streetName'}
                 label={'STREET NAME *'}
@@ -168,7 +168,7 @@ const SecondForm = () => {
                 control={control}
                 errors={errors}
               />
-            </View>
+            </View> */}
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <InputForm
                 title={'city'}
@@ -187,7 +187,7 @@ const SecondForm = () => {
               />
             </View>
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-              <DropDownFormFull
+              <DropDownForm
                 title={'serviceArea'}
                 label={'PREFERRED SERVICE AREA *'}
                 placeHolder={'Select Preferred Service Area'}
@@ -195,9 +195,17 @@ const SecondForm = () => {
                 control={control}
                 errors={errors}
               />
+              <DropDownForm
+                title={'state'}
+                label={'STATE *'}
+                placeHolder={'Enter State'}
+                data={stateNamesData}
+                control={control}
+                errors={errors}
+              />
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 30 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 150 }}>
               {/* <TouchableOpacity
                 onPress={() => {}}
                 style={{

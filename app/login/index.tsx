@@ -30,9 +30,24 @@ const Login = () => {
 
   const onSubmit = async (data: LoginData) => {
     console.log('Login Data:', data);
-    if (data.passcode && data.password) {
-      await submitLogin(data);
-      router.replace('/admin');
+
+    if (!data.passcode || !data.password) return;
+
+    const response = await submitLogin(data);
+
+    if (!response.success) {
+      return;
+    }
+
+    const role = response.data.role;
+    console.log('I needed this role:', role);
+
+    if (role === 'doctor') {
+      router.push('/admin');
+    } else if (role === 'form') {
+      router.push('/(form)');
+    } else {
+      router.push('/screen');
     }
   };
 

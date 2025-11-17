@@ -26,7 +26,9 @@ export function getTimeDifference(submittedTime: string): string {
   const submitted = new Date(submittedTime).getTime();
   const now = new Date().getTime();
 
-  const diffMs = now - submitted;
+  let diffMs = now - submitted;
+  // prevent negative time
+  if (diffMs < 0) diffMs = 0;
 
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
