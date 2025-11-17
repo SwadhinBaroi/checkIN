@@ -30,13 +30,13 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardProvider>
       <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="(form)" />
       </Stack>
       {isGlobalLoading && <AppLoader />}
       <ToastManager config={{ toastConfig }} />
-    </View>
+    </KeyboardProvider>
   );
 }
