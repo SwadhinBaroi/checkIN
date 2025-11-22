@@ -111,7 +111,12 @@ export const useFormStore = create<FormStore>((set, get) => ({
       sendData.append('phone', formData.phone);
       sendData.append('emergency_contact', formData.emergencyContact);
       sendData.append('ssn', formData.ssn);
-      sendData.append('street1', formData.secondStreet);
+      sendData.append(
+        'street1',
+        formData.secondStreet && formData.secondStreet.trim() !== ''
+          ? formData.secondStreet
+          : 'Submit Nothing'
+      );
       sendData.append('street2', 'No Need');
       sendData.append('last_known_address', formData.lastKnownStreet);
       sendData.append('city', formData.city);

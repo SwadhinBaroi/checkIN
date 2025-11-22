@@ -125,6 +125,7 @@ const SecondForm = () => {
                 keyboardType={'numeric'}
                 control={control}
                 errors={errors}
+                inputLen={10}
               />
               <InputForm
                 title={'ssn'}
@@ -133,6 +134,7 @@ const SecondForm = () => {
                 keyboardType={'numeric'}
                 control={control}
                 errors={errors}
+                inputLen={9}
               />
             </View>
 
@@ -152,23 +154,7 @@ const SecondForm = () => {
                 errors={errors}
               />
             </View>
-            {/* <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-              <InputForm
-                title={'streetName'}
-                label={'STREET NAME *'}
-                placeHolder={'Street Name'}
-                control={control}
-                errors={errors}
-              />
-              <DropDownForm
-                title={'state'}
-                label={'STATE *'}
-                placeHolder={'Enter State'}
-                data={stateNamesData}
-                control={control}
-                errors={errors}
-              />
-            </View> */}
+
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <InputForm
                 title={'city'}
@@ -184,6 +170,7 @@ const SecondForm = () => {
                 keyboardType={'number-pad'}
                 control={control}
                 errors={errors}
+                inputLen={5}
               />
             </View>
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
@@ -206,30 +193,6 @@ const SecondForm = () => {
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 150 }}>
-              {/* <TouchableOpacity
-                onPress={() => {}}
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#D1D5DB',
-                  alignSelf: 'center',
-                  height: layout.height,
-                  width: layout.width,
-                  borderRadius: 6,
-                  backgroundColor: '#D1D5DB',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                activeOpacity={0.8}>
-                <Text
-                  style={{
-                    color: '#000000',
-                    fontSize: 22,
-                    fontFamily: 'PoppinsSemi',
-                    textAlign: 'center',
-                  }}>
-                  Clear
-                </Text>
-              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
                   router.back();
@@ -263,10 +226,6 @@ const SecondForm = () => {
               <TouchableOpacity
                 onLayout={handleLayoutButton}
                 onPress={handleSubmit(onSubmit)}
-                // onPress={() => {
-                //   setColorState(colorState + 1);
-                //   router.push('/(form)/image_form');
-                // }}
                 style={{
                   borderWidth: 1,
                   borderColor: '#000',

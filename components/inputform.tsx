@@ -9,6 +9,7 @@ type Props<T> = {
   control: Control<T>;
   errors: FieldErrors<T>;
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'number-pad';
+  inputLen: number | undefined;
 };
 
 const InputForm = ({
@@ -18,6 +19,7 @@ const InputForm = ({
   control,
   errors,
   keyboardType = 'default',
+  inputLen,
 }: Props) => {
   // console.log('title in input form', title);
   // console.log('label in input form', label);
@@ -55,6 +57,7 @@ const InputForm = ({
               autoCapitalize="words"
               spellCheck={false}
               keyboardType={keyboardType}
+              maxLength={inputLen}
               style={{
                 borderWidth: 1,
                 borderColor: errors[title] ? 'red' : '#FFDE59',

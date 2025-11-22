@@ -203,6 +203,7 @@ const FirstForm = () => {
                 control={control}
                 errors={errors}
                 keyboardType={'number-pad'}
+                inputLen={12}
               />
               <InputForm
                 title={'emergencyContact'}
@@ -215,7 +216,7 @@ const FirstForm = () => {
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <DropDownForm
                 title={'idCard'}
-                label={'ID CARD?'}
+                label={'ID CARD? *'}
                 placeHolder={'Select Option'}
                 data={idCardData}
                 control={control}
@@ -242,7 +243,7 @@ const FirstForm = () => {
 
               <DropDownForm
                 title={'employed'}
-                label={'EMPLOYED?'}
+                label={'EMPLOYED? *'}
                 placeHolder={'Select Option'}
                 data={employedData}
                 control={control}
@@ -252,7 +253,7 @@ const FirstForm = () => {
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <DropDownForm
                 title={'homeless'}
-                label={'ARE YOU HOMELESS?'}
+                label={'ARE YOU HOMELESS? *'}
                 placeHolder={'Select Housing Status'}
                 data={homelessData}
                 control={control}
@@ -260,7 +261,7 @@ const FirstForm = () => {
               />
               <DropDownForm
                 title={'shower'}
-                label={'WOULD YOU LIKE TO SHOWER?'}
+                label={'WOULD YOU LIKE TO SHOWER? *'}
                 placeHolder={'Select Option'}
                 data={showerData}
                 control={control}
@@ -270,7 +271,7 @@ const FirstForm = () => {
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <DropDownFormFull
                 title={'hungry'}
-                label={'Are you hungry?'}
+                label={'Are you hungry? *'}
                 placeHolder={'Select Option'}
                 data={hungryData}
                 control={control}
